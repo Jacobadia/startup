@@ -11,3 +11,23 @@ The TTRPG Inventory Manager is a web-based tool inspired by the Resident Evil 4 
 - **Save and Load**: Persistent storage of inventory configurations that can be retrieved across game sessions.
 - **Real-Time Updates**: Game masters and players can push real-time inventory updates using WebSockets.
 - **User Authentication**: Players can create accounts and log in to save and manage their personalized inventories.
+
+## Technologies
+
+### HTML
+- **Purpose**: Provides the foundational structure of the inventory manager.
+- **Pages**: The site will consist of two primary HTML pages:
+  - **Login page**: A simple page where users can create an account or log in.
+  - **Inventory page**: The main page for viewing and interacting with the inventory grid.
+
+### CSS
+- **Purpose**: Adds styling to the inventory manager to create a clean, visually appealing grid-based layout.
+- **Key Features**:
+  - Responsive design ensuring the layout works on various screen sizes.
+  - Styling for the grid, items, buttons, and modals that display item details.
+
+### JavaScript
+- **Purpose**: Handles the interactivity of the inventory system.
+- **Key Features**:
+  - Drag-and-drop functionality for rearranging items.
+  - Click event handlers for showing item descriptions.
