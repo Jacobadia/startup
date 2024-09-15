@@ -63,4 +63,28 @@ The TTRPG Inventory Manager is a web-based tool inspired by the Resident Evil 4 
 - **Key Features**:
   - WebSockets will push updates whenever users modify their inventory, ensuring game masters or other players can see these updates live.
 
+## Application Design
+
+### Layout
+
+Here’s a rough sketch of the application's user interface:
+
+**Login Page**:
+- Simple form with email and password fields
+- A “Create Account” option for new users
+
+![LogIn Mockup](https://github.com/Jacobadia/startup/blob/main/Inventory%20login.png?raw=true)
+
+**Inventory Page**:
+- A grid where users can drag and drop items
+- Item slots will be visually laid out to mimic a TTRPG-style inventory
+- A sidebar displaying item details, such as stats, weight, and description, when clicked
+
+![Inventory Mockup](https://github.com/Jacobadia/startup/blob/main/Inventory.png?raw=true)
+
+### WebSocket
+- **Purpose**: Enables real-time updates for the inventory system.
+- **Key Features**:
+  - WebSockets will push updates whenever users modify their inventory, ensuring game masters or other players can see these updates live.
+
 
