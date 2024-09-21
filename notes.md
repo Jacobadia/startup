@@ -40,4 +40,12 @@
 
 `exit`
 
+### Domain Name & DNS Setup with AWS Route 53
+
+AWS Route 53: This service allows you to buy a domain, manage DNS records, and handle DNS routing for your web application.
+
+A record: Maps your domain to your server’s public IP address.
+
+Wildcard record (*): Maps any subdomain to your server's IP.
+
 
