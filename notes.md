@@ -94,6 +94,8 @@ Here is a concise summary of the relevant HTML information for your `notes.md` f
   - `<a href="url">link text</a>`.
 - **Tables**:
   - `<table>`, `<tr>`, `<th>`, `<td>`: Table, row, header, data.
+- **Images**:
+   - `<img src="https://www.example.com/images" alt="description" />`  
   
 ### Attributes
 - **Common Attributes**: 
