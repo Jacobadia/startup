@@ -82,9 +82,15 @@ Here’s a rough sketch of the application's user interface:
 
 ![Inventory Mockup](https://github.com/Jacobadia/startup/blob/main/Inventory.png?raw=true)
 
-### WebSocket
-- **Purpose**: Enables real-time updates for the inventory system.
-- **Key Features**:
-  - WebSockets will push updates whenever users modify their inventory, ensuring game masters or other players can see these updates live.
+# HTML Deliverable
+- HTML pages for each component of your application
+- Proper use of HTML tags including BODY, NAV, MAIN, HEADER, FOOTER
+- Links between pages as necessary
+- Application textual content
+- Placeholder for 3rd party service calls
+- Application images
+- Login placeholder, including user name display
+- Database data placeholder showing content stored in the database
+- WebSocket data placeholder showing where realtime communication will go
 
 
