@@ -86,8 +86,10 @@ Here’s a rough sketch of the application's user interface:
 - [x] HTML pages for each component of your application
     - Two pages one to log in and the other for the interactable inventory
 - [x] Proper use of HTML tags including BODY, NAV, MAIN, HEADER, FOOTER
-- [x] Links between pages as necessary 
-- [ ] Application textual content
+- [x] Links between pages as necessary
+  - Navigation in header 
+- [x] Application textual content
+  - Titles on pages and labels buttons
 - [ ] Placeholder for 3rd party service calls
 - [ ] Application images
 - [ ] Login placeholder, including user name display
