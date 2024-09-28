@@ -36,7 +36,7 @@
 ### September 20th,
 
 ### Key AWS Commands:
-`ssh -i C:\Users\Jacob\.ssh\Turtles.pem ubuntu@98.84.2.156`
+`ssh -i /c/Users/Jacob/.ssh/Turtles.pem ubuntu@98.84.2.156`
 
 `exit`
 
