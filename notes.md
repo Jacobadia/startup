@@ -112,4 +112,21 @@ Here is a concise summary of the relevant HTML information for your `notes.md` f
 
 ---
 
+### September 27
 
+## Deployment Process & Key Commands
+
+### Simon HTML Application Deployment
+- Deploy your application using the `deployFiles.sh` script to production.
+  
+### Key Deployment Command:
+`./deployFiles.sh -k /c/Users/Jacob/.ssh/Turtles.pem -h rpginventory.click -s simon`
+
+### Steps Performed by the Script:
+1. Deletes any previous deployment for the app.
+2. Copies all files from the project directory.
+3. Ensures Caddy hosts the files under the appropriate subdomain (e.g., `simon.yourdomain.click`).
+
+- **Important Note**: Make sure you're using a POSIX-compliant console (Git Bash or similar) for this, and not PowerShell or CMD.
+
+---
