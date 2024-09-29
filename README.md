@@ -95,7 +95,7 @@ Here’s a rough sketch of the application's user interface:
 - [x] Application images
   - icon and suitcase image on login page 
 - [x] Login placeholder, including user name display
-- [ ] Database data placeholder showing content stored in the database
-- [ ] WebSocket data placeholder showing where realtime communication will go
+- [x] Database data placeholder showing content stored in the database
+- [x] WebSocket data placeholder showing where realtime communication will go
 
 
