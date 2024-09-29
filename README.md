@@ -91,7 +91,8 @@ Here’s a rough sketch of the application's user interface:
 - [x] Application textual content
   - Titles on pages and labels buttons
 - [ ] Placeholder for 3rd party service calls
-- [ ] Application images
+- [x] Application images
+      - icon and suitcase image on login page 
 - [ ] Login placeholder, including user name display
 - [ ] Database data placeholder showing content stored in the database
 - [ ] WebSocket data placeholder showing where realtime communication will go
