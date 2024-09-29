@@ -90,10 +90,11 @@ Here’s a rough sketch of the application's user interface:
   - Navigation in header 
 - [x] Application textual content
   - Titles on pages and labels buttons
-- [ ] Placeholder for 3rd party service calls
+- [x] Placeholder for 3rd party service calls
+  - Random duck pictures API placeholder
 - [x] Application images
-      - icon and suitcase image on login page 
-- [ ] Login placeholder, including user name display
+  - icon and suitcase image on login page 
+- [x] Login placeholder, including user name display
 - [ ] Database data placeholder showing content stored in the database
 - [ ] WebSocket data placeholder showing where realtime communication will go
 
