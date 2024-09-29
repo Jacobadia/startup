@@ -91,7 +91,7 @@ Here’s a rough sketch of the application's user interface:
 - [x] Application textual content
   - Titles on pages and labels buttons
 - [x] Placeholder for 3rd party service calls
-  - Random duck pictures API placeholder
+  - Random duck pictures API placeholder (pictures will be placed onto the objects that can be dragged)
 - [x] Application images
   - icon and suitcase image on login page 
 - [x] Login placeholder, including user name display
