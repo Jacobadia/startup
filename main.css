@@ -12,6 +12,15 @@ h1 {
   text-align: center;
 }
 
+div p {
+  text-align: left;
+}
+
+img {
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
 /* Header styles */
 header {
   background-color: #3d405b; /* Dark Slate Blue */
