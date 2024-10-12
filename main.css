@@ -11,3 +11,30 @@ h1 {
   color: #3d405b; /* Dark Slate Blue */
   text-align: center;
 }
+
+/* Header styles */
+header {
+  background-color: #3d405b; /* Dark Slate Blue */
+  padding: 10px;
+  color: #f4f1de; /* Light Beige */
+  text-align: center;
+}
+
+nav menu li {
+  display: inline;
+  margin: 0 15px;
+}
+
+nav menu li a {
+  color: #f4f1de; /* Light Beige */
+  text-decoration: none;
+}
+
+nav menu li a:hover {
+  text-decoration: underline;
+}
+
+hr {
+  margin: 10px 0;
+  border: 1px solid #81b29a; /* Muted Teal */
+}
