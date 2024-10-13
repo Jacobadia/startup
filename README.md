@@ -98,4 +98,19 @@ Here’s a rough sketch of the application's user interface:
 - [x] Database data placeholder showing content stored in the database
 - [x] WebSocket data placeholder showing where realtime communication will go
 
+# CSS Deliverable
+- [x] Properly styled CSS Header, footer, and main content body
+    - Three pages one to log in, the other for the interactable inventory, and an about page
+- [x] Navigation elements
+    - nav in the header
+- [x] Links between pages as necessary
+  - Navigation in header 
+- [x] Responsive to window resizing
+  - each page designed with @media when necessary
+- [x] Application elements
+  - Styled buttons and forms
+- [x] Application images
+  - suitcase image on about page 
+- [x] Application text content
+  - styled about page
 
