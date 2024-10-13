@@ -2,8 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 20px;
-  height: 100vh; /* Make the content-wrapper full height */
+  gap: 0;
+  height: auto; /* Make the content-wrapper full height */
 }
 
 .description {
@@ -39,3 +39,4 @@ img {
     max-height: 300px; /* Reduce the image height for smaller screens */
   }
 }
+
