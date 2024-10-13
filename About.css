@@ -1,0 +1,41 @@
+.content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  height: 100vh; /* Make the content-wrapper full height */
+}
+
+.description {
+  width: 50%; /* Paragraph section takes up half the screen width */
+}
+
+.image-container {
+  width: 50%; /* Reserve half the width for the image */
+  display: flex;
+  justify-content: center; /* Center the image horizontally */
+  align-items: center; /* Center the image vertically */
+}
+
+img {
+  max-width: 100%; /* Ensure the image doesn't exceed its container's width */
+  max-height: 400px; /* Limit the height of the image */
+  width: auto; /* Maintain aspect ratio */
+  object-fit: contain; /* Ensure the image is contained within the height and width limits */
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+    align-items: center;
+    height: auto; /* Remove full height on small screens */
+  }
+
+  .description, .image-container {
+    width: 100%; /* Full width on smaller screens */
+  }
+
+  img {
+    max-height: 300px; /* Reduce the image height for smaller screens */
+  }
+}
