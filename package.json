@@ -1,0 +1,17 @@
+{
+  "name": "startup",
+  "version": "1.0.0",
+  "description": "The TTRPG Inventory Manager is a web-based tool inspired by the Resident Evil 4 inventory system, designed for tabletop role-playing games (TTRPGs). It allows players to manage and organize their in-game items visually, helping them fit everything into limited inventory spaces and helping them not to forget all the crap they carry around. With simple drag-and-drop interactivity, users can arrange items, weapons, and equipment in a grid-based inventory, making it perfect for a variety of TTRPG campaigns.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^5.4.11"
+  }
+}
