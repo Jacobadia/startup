@@ -26,6 +26,7 @@ export default function App() {
                       <Route path="/" element={<Login />} />
                       <Route path="/inventory" element={<Inventory />} />
                       <Route path="/about" element={<About />} />
+                      <Route path='*' element={<NotFound />} />
                   </Routes>
 
                 <footer>
