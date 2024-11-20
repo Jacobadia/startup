@@ -4,7 +4,7 @@ import './app.css';
 
 export default function App() {
     return (
-        <div>
+<div>
     <header>
       <h1>TTRPG Inventory Manager</h1>
       <nav>
