@@ -14,9 +14,9 @@ export default function App() {
                     <h1>TTRPG Inventory Manager</h1>
                     <nav>
                         <ul>
-                            <li><NavLink to="/">Login</NavLink></li>
-                            <li><NavLink to="/inventory">Inventory</NavLink></li>
-                            <li><NavLink to="/about">About</NavLink></li>
+                            <li><NavLink className='nav-link' to="/">Login</NavLink></li>
+                            <li><NavLink className='nav-link' to="/inventory">Inventory</NavLink></li>
+                            <li><NavLink className='nav-link' to="/about">About</NavLink></li>
                         </ul>
                     </nav>
                     <hr />
