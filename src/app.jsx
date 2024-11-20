@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
-import { Play } from './inventory/inventory';
+import { Inventory } from './inventory/inventory';
 import { About } from './about/about';
 
 export default function App() {
@@ -14,9 +14,9 @@ export default function App() {
       <h1>TTRPG Inventory Manager</h1>
       <nav>
         <menu>
-          <li><a href="index.html">Login Page</a></li>
-          <li><a href="inventory.html">Inventory</a></li>
-          <li><a href="about.html">About</a></li>
+          <li><NavLink to='Login'>Login</NavLink></li>
+          <li><NavLink to='Inventory'>Inventory</NavLink></li>
+          <li><NavLink to='About'>About</NavLink></li>
         </menu>
       </nav>
 
