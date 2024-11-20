@@ -8,30 +8,39 @@ import { About } from './about/about';
 
 export default function App() {
     return (
-    <BrowserRouter>
-<div>
-    <header>
-      <h1>TTRPG Inventory Manager</h1>
-      <nav>
-        <menu>
-          <li><NavLink to='Login'>Login</NavLink></li>
-          <li><NavLink to='Inventory'>Inventory</NavLink></li>
-          <li><NavLink to='About'>About</NavLink></li>
-        </menu>
-      </nav>
+        <BrowserRouter>
+            <div>
+                <header>
+                    <h1>TTRPG Inventory Manager</h1>
+                    <nav>
+                        <ul>
+                            <li><NavLink to="/">Login</NavLink></li>
+                            <li><NavLink to="/inventory">Inventory</NavLink></li>
+                            <li><NavLink to="/about">About</NavLink></li>
+                        </ul>
+                    </nav>
+                    <hr />
+                </header>
 
-      <hr />
-    </header>
- 
-        <main>App components go here</main>
-  
-    <footer>
-      <hr />
-      <span>Jacob E. Martinez</span>
-      <br />
-      <a href="https://github.com/Jacobadia/startup">GitHub</a>
-    </footer>
-  </div>
-  </BrowserRouter>
+                  <Routes>
+                      <Route path="/" element={<Login />} />
+                      <Route path="/inventory" element={<Inventory />} />
+                      <Route path="/about" element={<About />} />
+                  </Routes>
+
+                <footer>
+                    <hr />
+                    <span>Jacob E. Martinez</span>
+                    <br />
+                    <a href="https://github.com/Jacobadia/startup">GitHub</a>
+                </footer>
+            </div>
+        </BrowserRouter>
     );
+}
+
+
+  function NotFound() {
+    return <main className='container-fluid bg-secondary text-center'>404: Return to sender. Address unknown.</main>;
   }
+  
