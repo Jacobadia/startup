@@ -1,9 +1,9 @@
 import React from 'react';
 
-export function inventory() {
+export function Inventory() {
   return (
     <main className='container-fluid bg-secondary text-center'>
-      <div>login displayed here</div>
+      <div>inventory displayed here</div>
     </main>
   );
 }
