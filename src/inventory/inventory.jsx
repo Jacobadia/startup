@@ -5,12 +5,13 @@ export function Inventory() {
   return (
 <main>
       <section id="object-creator">
-        <label for="object-size">Choose Object Size: </label>
-        <select id="object-size">
-            <option value="1x1">1x1</option>
-            <option value="2x2">2x2</option>
-            <option value="4x2">4x2</option>
-            <option value="4x4">4x4</option>
+        <label for="Strength-Score">Strength Score :  </label>
+        <select id="Strength-Score">
+          {Array.from({ length: 20 }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              {i + 1}
+            </option>
+          ))}
         </select>
         <button id="add-object">Add Object</button>
         <div id="API-Placeholder">
