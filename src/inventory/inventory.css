@@ -1,37 +1,46 @@
 /* Style for the object creator section */
 #object-creator {
-  position: absolute;
-  top: 150px; /* Adjust as needed for spacing */
-  right: 20px; /* Positions it in the top right corner */
-  background-color: #f4f1de; /* Light Beige */
-  padding: 10px;
-  border-radius: 5px;
+  position: relative; /* Keep relative for small screens */
+  padding: 10px; /* Adjust padding */
+  background-color: #f4f1de; /* Optional: light background for better visibility */
+  border-radius: 5px; /* Optional: rounded corners */
+  width: 25%; /* Adjust width for smaller screens */
+  margin: 20px auto; /* Center and add margin */
+  top: auto; /* Ensure top positioning is not applie */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
 }
 
-/* Style for the inventory grid */
-#inventory-grid {
-  margin-top: 85px; /* Adjust to prevent overlap with object creator */
+/* Default grid styles */
+.grid-container {
+  display: grid;
+  gap: 10px; /* Default space between cells */
+  margin: 10px auto;
+  max-width: 70%; /* Ensure grid doesn't get too wide */
+  transition: gap 0.3s ease, max-width 0.3s ease; /* Smooth transitions */
 }
 
-table {
-  width: 80%; 
-  border-collapse: collapse; /* Remove space between borders */
-  margin: 0 auto;
+/* Smaller grid adjustment */
+.grid-container.shrink {
+  gap: 5px; /* Reduce gap for smaller strength scores */
+  max-width: 30%; /* Shrink grid width */
 }
 
-th {
-  background-color: #3d405b; /* Header background color */
-  color: #f4f1de; /* Header text color */
-  padding: 10px;
+/* Grid cells */
+.grid-cell {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  aspect-ratio: 1; /* Keeps cells square */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-td {
-  width: calc(80% / 20); /* Width of each cell in the grid */
-  height: 40px; /* Height of each cell */
-  border: 1px solid #3d405b; /* Light gray border */
-  text-align: center; /* Center text in cells */
+.grid-cell:hover {
+  background-color: #e0e0e0;
 }
+
 
 @media (max-width: 1200px) {
   #object-creator {
