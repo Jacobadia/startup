@@ -40,7 +40,7 @@ export function Login() {
             type="text" 
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.valueAsNumber)} 
+            onChange={(e) => setUsername(e.target.value)} 
             />
         </div>
         <div>
