@@ -50,9 +50,11 @@ export function Inventory() {
         <div id="inventory-grid">
           <h3>Not Encumbered!</h3>
           {renderGrid()}
-          <h3>Encumbered (-10 speed)</h3>
+          <h3>Encumbered</h3>
+          <h6>(-10 speed)</h6>
           {renderGrid()}
           <h3>Heavly Encumbered</h3>
+          <h6>(-20 speed and you have disadvantage on ability checks, attack rolls, and saving throws that use Strength, Dexterity, or Constitution.)</h6>
           {renderGrid()}
         </div>
 
