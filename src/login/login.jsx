@@ -1,6 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function Login() {
+  const [username, setUsername] = useState('');
+  const [welcomeMessage, setWelcomeMessage] = useState('');
+  const navigate = useNavigate();
+
+  const handleLoginOrCreate = () => {}
+
+  const handleContinue = () => {}
+
+
   return (
     <main>
       <h1>Welcome to TTRPG Inventory</h1>
