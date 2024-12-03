@@ -32,7 +32,7 @@ export function Inventory() {
           value={strengthScore}
           onChange={handleStrengthScoreChange}
         >
-          {Array.from({ length: 20 }, (_, i) => (
+          {Array.from({ length: 17 }, (_, i) => (
             <option key={20 - i} value={20 - i}>
               {20 - i}
             </option>

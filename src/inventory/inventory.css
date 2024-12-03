@@ -13,7 +13,7 @@
 /* Default grid styles */
 .grid-container {
   display: grid;
-  gap: 10px; /* Default space between cells */
+  gap: 2px; /* Default space between cells */
   margin: 10px auto;
   max-width: 70%; /* Ensure grid doesn't get too wide */
   transition: gap 0.3s ease, max-width 0.3s ease; /* Smooth transitions */
@@ -21,7 +21,6 @@
 
 /* Smaller grid adjustment */
 .grid-container.shrink {
-  gap: 5px; /* Reduce gap for smaller strength scores */
   max-width: 30%; /* Shrink grid width */
 }
 
