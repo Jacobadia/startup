@@ -3,51 +3,38 @@ import './inventory.css';
 
 export function Inventory() {
   const [strengthScore, setStrengthScore] = useState(20); // Default to 1 column
-  const gridCells = document.querySelectorAll('.grid-cell');
-  const squares = document.querySelectorAll('.square');
+  const [squares, setSquares] = useState([]); // State to hold draggable squares
 
-  squares.forEach(square => {
-    square.addEventListener('dragstart', handleDragStart);
-    square.addEventListener('dragend', handleDragEnd); // Ensure visibility is restored on drag end
-    square.addEventListener('click', handleSquareClick); // Add click handler for editing
-  });
-
-  gridCells.forEach(cell => {
-    cell.addEventListener('dragover', handleDragOver);
-    cell.addEventListener('drop', handleDrop);
-  });
-  
   // Drag and drop functions
-  function handleDragStart(e) {
+  const handleDragStart = (e) => {
     e.dataTransfer.setData('text/plain', e.target.id);
     setTimeout(() => e.target.classList.add('dragging'), 0); // Add a dragging class
-  }
-  
-  function handleDragEnd(e) {
+  };
+
+  const handleDragEnd = (e) => {
     e.target.classList.remove('dragging'); // Remove the dragging class
     e.target.style.visibility = 'visible'; // Ensure visibility is restored
-  }
-  
-  function handleDragOver(e) {
+  };
+
+  const handleDragOver = (e) => {
     e.preventDefault(); // Allows the drop event to be triggered
-  }
-  
-  function handleDrop(e) {
+  };
+
+  const handleDrop = (e) => {
     e.preventDefault();
-    
+
     // Get the dragged element
     const draggedSquare = document.querySelector('.square.dragging');
-    
+
     // Place the square inside the grid cell
-    if (draggedSquare && !e.target.querySelector('.square')) { // Ensure the grid cell is empty
+    if (draggedSquare && !e.target.querySelector('.square')) {
       e.target.appendChild(draggedSquare);
     }
-  }
-  
-  // Handle square click to edit information
-  function handleSquareClick(e) {
+  };
+
+  const handleSquareClick = (e) => {
     const square = e.target;
-  
+
     // Create or display the editing form
     let editForm = document.querySelector('#edit-form');
     if (!editForm) {
@@ -73,13 +60,13 @@ export function Inventory() {
       `;
       document.body.appendChild(editForm);
     }
-  
+
     // Populate form with the square's current data
     const nameInput = document.querySelector('#square-name');
     const infoTextarea = document.querySelector('#square-info');
     nameInput.value = square.dataset.name || `Square ${square.id}`;
     infoTextarea.value = square.dataset.info || 'No additional information.';
-  
+
     // Save button functionality
     const saveButton = document.querySelector('#save-btn');
     saveButton.onclick = () => {
@@ -88,7 +75,7 @@ export function Inventory() {
       square.textContent = nameInput.value; // Display the name on the square
       alert('Square information updated!');
     };
-  
+
     // Delete button functionality
     const deleteButton = document.querySelector('#delete-btn');
     deleteButton.onclick = () => {
@@ -98,14 +85,16 @@ export function Inventory() {
         alert('Square deleted!');
       }
     };
-  }
-  
-  // Initialize square names and editable properties
-  squares.forEach((square, index) => {
-    square.dataset.name = `Square ${index + 1}`;
-    square.dataset.info = `This is information about Square ${index + 1}.`;
-    square.textContent = square.dataset.name; // Display the name on the square
-  });
+  };
+
+  const handleAddObject = () => {
+    const newSquare = {
+      id: `square-${squares.length + 1}`,
+      name: `Square ${squares.length + 1}`,
+      info: 'No additional information.',
+    };
+    setSquares([...squares, newSquare]);
+  };
 
   const handleStrengthScoreChange = (e) => {
     setStrengthScore(Number(e.target.value));
@@ -115,12 +104,17 @@ export function Inventory() {
     const rows = 5;
     const cols = strengthScore;
 
-    const containerClass = strengthScore < 8 ? "grid-container shrink" : "grid-container";
+    const containerClass = strengthScore < 8 ? 'grid-container shrink' : 'grid-container';
 
     return (
       <div className={containerClass} style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
         {Array.from({ length: rows * cols }, (_, index) => (
-          <div key={index} className="grid-cell"></div>
+          <div
+            key={index}
+            className="grid-cell"
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+          ></div>
         ))}
       </div>
     );
@@ -128,10 +122,21 @@ export function Inventory() {
 
   return (
     <main>
-        <div class="draggable-container">
-        <div class="square" draggable="true"></div>
-        <div class="square" draggable="true"></div>
-        </div>
+      <div className="draggable-container">
+        {squares.map((square) => (
+          <div
+            key={square.id}
+            id={square.id}
+            className="square"
+            draggable="true"
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onClick={handleSquareClick}
+          >
+            {square.name}
+          </div>
+        ))}
+      </div>
       <section id="object-creator">
         <label htmlFor="Strength-Score">Strength Score:</label>
         <select
@@ -145,7 +150,9 @@ export function Inventory() {
             </option>
           ))}
         </select>
-        <button id="add-object">Add Object</button>
+        <button id="add-object" onClick={handleAddObject}>
+          Add Object
+        </button>
         <div id="API-Placeholder">
           <h10>Random Duck Pictures API PlaceHolder</h10>
         </div>
@@ -158,10 +165,15 @@ export function Inventory() {
           <h3>Not Encumbered!</h3>
           {renderGrid()}
           <h3>Encumbered</h3>
-          <h6>(-10 speed)</h6>
+          <h6>
+            (-10 speed)
+          </h6>
           {renderGrid()}
-          <h3>Heavly Encumbered</h3>
-          <h6>(-20 speed and you have disadvantage on ability checks, attack rolls, and saving throws that use Strength, Dexterity, or Constitution.)</h6>
+          <h3>Heavily Encumbered</h3>
+          <h6>
+            (-20 speed and you have disadvantage on ability checks, attack rolls,
+            and saving throws that use Strength, Dexterity, or Constitution.)
+          </h6>
           {renderGrid()}
         </div>
 
@@ -178,3 +190,4 @@ export function Inventory() {
     </main>
   );
 }
+
