@@ -15,7 +15,7 @@
   display: grid;
   gap: 2px; /* Default space between cells */
   margin: 10px auto;
-  max-width: 70%; /* Ensure grid doesn't get too wide */
+  max-width: 90%; /* Ensure grid doesn't get too wide */
   transition: gap 0.3s ease, max-width 0.3s ease; /* Smooth transitions */
 }
 
