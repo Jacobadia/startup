@@ -34,6 +34,7 @@
   align-items: center;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  overflow: hidden;
 }
 
 .grid-cell:hover {
@@ -52,9 +53,12 @@
   line-height: 1; /* Adjust line height */
   border-radius: 5px; /* Optional: rounded corners */
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3); /* Optional: subtle shadow */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; /* Flexbox for centering */
+  justify-content: center; /* Center text horizontally */
+  align-items: center; /* Center text vertically */
+  overflow: hidden; /* Prevent overflow */
+  text-overflow: ellipsis; /* Show ellipsis for long text */
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 .item:hover {
