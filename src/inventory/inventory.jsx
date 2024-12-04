@@ -3,7 +3,7 @@ import './inventory.css';
 
 export function Inventory() {
   const [strengthScore, setStrengthScore] = useState(20); // Default to 1 column
-  const [squares, setSquares] = useState([]); // State to hold draggable squares
+  const [items, setItems] = useState([]); // State to hold draggable items
 
   // Drag and drop functions
   const handleDragStart = (e) => {
@@ -24,16 +24,16 @@ export function Inventory() {
     e.preventDefault();
 
     // Get the dragged element
-    const draggedSquare = document.querySelector('.square.dragging');
+    const draggedItem = document.querySelector('.item.dragging');
 
-    // Place the square inside the grid cell
-    if (draggedSquare && !e.target.querySelector('.square')) {
-      e.target.appendChild(draggedSquare);
+    // Place the item inside the grid cell
+    if (draggedItem && !e.target.querySelector('.item')) {
+      e.target.appendChild(draggedItem);
     }
   };
 
-  const handleSquareClick = (e) => {
-    const square = e.target;
+  const handleItemClick = (e) => {
+    const item = e.target;
 
     // Create or display the editing form
     let editForm = document.querySelector('#edit-form');
@@ -48,11 +48,11 @@ export function Inventory() {
       editForm.style.border = '1px solid #000';
       editForm.innerHTML = `
         <label>
-          Name: <input type="text" id="square-name" />
+          Name: <input type="text" id="item-name" />
         </label>
         <br />
         <label>
-          Info: <textarea id="square-info"></textarea>
+          Info: <textarea id="item-info"></textarea>
         </label>
         <br />
         <button id="save-btn">Save</button>
@@ -61,39 +61,39 @@ export function Inventory() {
       document.body.appendChild(editForm);
     }
 
-    // Populate form with the square's current data
-    const nameInput = document.querySelector('#square-name');
-    const infoTextarea = document.querySelector('#square-info');
-    nameInput.value = square.dataset.name || `Square ${square.id}`;
-    infoTextarea.value = square.dataset.info || 'No additional information.';
+    // Populate form with the item's current data
+    const nameInput = document.querySelector('#item-name');
+    const infoTextarea = document.querySelector('#item-info');
+    nameInput.value = item.dataset.name || `Item ${item.id}`;
+    infoTextarea.value = item.dataset.info || 'No additional information.';
 
     // Save button functionality
     const saveButton = document.querySelector('#save-btn');
     saveButton.onclick = () => {
-      square.dataset.name = nameInput.value;
-      square.dataset.info = infoTextarea.value;
-      square.textContent = nameInput.value; // Display the name on the square
-      alert('Square information updated!');
+      item.dataset.name = nameInput.value;
+      item.dataset.info = infoTextarea.value;
+      item.textContent = nameInput.value; // Display the name on the item
+      alert('Item information updated!');
     };
 
     // Delete button functionality
     const deleteButton = document.querySelector('#delete-btn');
     deleteButton.onclick = () => {
-      if (confirm('Are you sure you want to delete this square?')) {
-        square.remove();
+      if (confirm('Are you sure you want to delete this item?')) {
+        item.remove();
         editForm.remove(); // Remove the edit form as well
-        alert('Square deleted!');
+        alert('Item deleted!');
       }
     };
   };
 
   const handleAddObject = () => {
-    const newSquare = {
-      id: `square-${squares.length + 1}`,
-      name: `Square ${squares.length + 1}`,
+    const newItem = {
+      id: `item-${items.length + 1}`,
+      name: `Item ${items.length + 1}`,
       info: 'No additional information.',
     };
-    setSquares([...squares, newSquare]);
+    setItems([...items, newItem]);
   };
 
   const handleStrengthScoreChange = (e) => {
@@ -123,17 +123,17 @@ export function Inventory() {
   return (
     <main>
       <div className="draggable-container">
-        {squares.map((square) => (
+        {items.map((item) => (
           <div
-            key={square.id}
-            id={square.id}
-            className="square"
+            key={item.id}
+            id={item.id}
+            className="item"
             draggable="true"
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
-            onClick={handleSquareClick}
+            onClick={handleItemClick}
           >
-            {square.name}
+            {item.name}
           </div>
         ))}
       </div>
