@@ -6,7 +6,7 @@
   border-radius: 5px; /* Optional: rounded corners */
   width: 25%; /* Adjust width for smaller screens */
   margin: 20px auto; /* Center and add margin */
-  top: auto; /* Ensure top positioning is not applie */
+  top: auto; /* Ensure top positioning is not applied */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
 }
 
@@ -40,7 +40,35 @@
   background-color: #e0e0e0;
 }
 
+/* Draggable items (blue squares) */
+.item {
+  width: 100%; /* Full size of the grid cell */
+  height: 100%; /* Match grid cell dimensions */
+  background-color: #3d405b; /* Blue color */
+  border: 2px solid #393c56; /* Darker blue border */
+  color: #fff; /* White text for contrast */
+  font-size: 0.8rem; /* Adjust font size */
+  text-align: center; /* Center text */
+  line-height: 1; /* Adjust line height */
+  border-radius: 5px; /* Optional: rounded corners */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3); /* Optional: subtle shadow */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.item:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  cursor: grab; /* Pointer changes to grab */
+}
+
+/* Dragging state for items */
+.item.dragging {
+  opacity: 0.6; /* Make the item semi-transparent while dragging */
+  cursor: grabbing; /* Pointer changes to grabbing */
+}
+
+/* Responsive adjustments */
 @media (max-width: 1200px) {
   #object-creator {
     position: relative; /* Keep relative for small screens */
@@ -53,4 +81,3 @@
   }
 }
 
-  
