@@ -1,56 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../UserContext'; // Import the context
 
 export function Login() {
-  const [username, setUsername] = useState('');
-  const [welcomeMessage, setWelcomeMessage] = useState('');
+  const [usernameInput, setUsernameInput] = useState('');
+  const { setUsername } = useContext(UserContext); // Access setUsername from context
   const navigate = useNavigate();
 
   const handleLoginOrCreate = () => {
-    if (username.trim()) {
-      setWelcomeMessage(`Welcome ${username}`);
+    if (usernameInput.trim()) {
+      setUsername(usernameInput); // Store username in context
+      navigate('/inventory'); // Redirect to inventory
     } else {
       alert('Please enter a username.');
     }
   };
 
-  const handleContinue = () => {
-    navigate('/inventory');
-  };
-
-
   return (
     <main>
       <h1>Welcome to TTRPG Inventory</h1>
-      {welcomeMessage ? (
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleLoginOrCreate();
+        }}
+      >
         <div>
-          <p>{welcomeMessage}</p>
-          <button onClick={handleContinue}>Continue</button>
-        </div>
-      ) : (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleLoginOrCreate();
-          }}
-        >
-          <div>
-            <span>Username</span>
-            <input 
+          <span>Username</span>
+          <input 
             type="text" 
             placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)} 
-            />
+            value={usernameInput}
+            onChange={(e) => setUsernameInput(e.target.value)} 
+          />
         </div>
         <div>
           <span>Password</span>
           <input type="password" placeholder="password" />
         </div>
-        <button type="submit" onClick={handleLoginOrCreate}>Login</button>
-        <button type="submit" onClick={handleLoginOrCreate}>Create</button>
+        <button type="submit">Login</button>
+        <button type="submit">Create</button>
       </form>
-      )}
     </main>
   );
 }

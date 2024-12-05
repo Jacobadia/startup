@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './inventory.css';
+import { UserContext } from '../UserContext'; // Import the context
 
 export function Inventory() {
+  const { username } = useContext(UserContext); // Access the username
   const [strengthScore, setStrengthScore] = useState(20); // Default to 1 column
   const [items, setItems] = useState([]); // State to hold draggable items
 
@@ -159,8 +161,7 @@ export function Inventory() {
       </section>
 
       <section id="inventory-section">
-        <h2>Username-Placeholder's Inventory</h2>
-
+        <h2>{username ? `${username}'s Inventory` : "Inventory"}</h2>
         <div id="inventory-grid">
           <h3>Not Encumbered!</h3>
           {renderGrid()}
