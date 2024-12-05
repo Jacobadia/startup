@@ -76,6 +76,7 @@ export function Inventory() {
       item.dataset.info = infoTextarea.value;
       item.textContent = nameInput.value; // Display the name on the item
       alert('Item information updated!');
+      editForm.remove();
     };
 
     // Delete button functionality
