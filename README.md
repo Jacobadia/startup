@@ -114,3 +114,23 @@ Here’s a rough sketch of the application's user interface:
 - [x] Application text content
   - styled about page
 
+## React deliverable
+
+For this deliverable I used JavaScript and React so that the application completely works for a single user. I also added placeholders for future technology.
+
+- [x] **Bundled and transpiled** - done!
+- [x] **Components** - Login, inventory and about are components with mocks for login, WebSocket.
+  - [x] **login** - When you press enter or the login button it takes you to the inventory page and displays the username.
+  - [x] **database** - Displayes item and item descriptions. Currently this is stored and retrieved from local storage, but it will be replaced with the database data later.
+  - [x] **WebSocket** - Simulates real-time updates. Once implemented, it will allow inventory changes to be reflected live across multiple connected users.
+- [x] **Router** - Routing between login and inventory and about components.
+- [x] **Hooks**
+  - **useState**: 
+    - Used in the `Login` component to manage username input.
+    - Used in the `Inventory` component to manage inventory items and grid size based on the strength score.
+  - **useContext**: 
+    - Provides global state for the username via a `UserContext`.
+    - Used in `Login` to set the username and in `Inventory` to display it.
+  - **useNavigate**: 
+    - Used in the `Login` component for programmatically navigating to the inventory page after a successful login.
+
