@@ -5,7 +5,7 @@ import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
 import { Inventory } from './inventory/inventory';
 import { About } from './about/about';
-import { UserProvider } from './UserContext'; // Import the UserProvider
+import { UserProvider } from './UserContext'; 
 
 export default function App() {
     return (
