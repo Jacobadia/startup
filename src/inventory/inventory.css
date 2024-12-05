@@ -62,8 +62,8 @@
 }
 
 .item:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-  cursor: grab; /* Pointer changes to grab */
+  background-color: #0056b3; 
+  cursor: grab; 
 }
 
 /* Dragging state for items */
