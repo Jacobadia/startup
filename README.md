@@ -134,3 +134,13 @@ For this deliverable I used JavaScript and React so that the application complet
   - **useNavigate**: 
     - Used in the `Login` component for programmatically navigating to the inventory page after a successful login.
 
+## Service deliverable
+
+For this deliverable, I created a full-stack web application, the application includes a Node.js/Express backend and a React frontend with dynamic interaction.
+
+- [x] **Node.js/Express HTTP service** - I created the backend service using Express, handling endpoints for user authentication and inventory management.
+- [x] **Static middleware for frontend** - I used Express static middleware to serve the frontend content from the public directory.
+- [x] **Calls to third party endpoints** - I implemented calls to the Picsum Photos API for random artwork and the Useless Facts API for fun facts.
+- [x] **Backend service endpoints** - I created authentication endpoints (create, login, logout) and endpoints for fetching and saving user inventories.
+- [x] **Frontend calls service endpoints** - I used the fetch function to interact with the backend endpoints for user authentication and inventory management.
+
