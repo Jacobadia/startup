@@ -1,151 +1,189 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './inventory.css';
 import { UserContext } from '../UserContext'; // Import the context
 
 export function Inventory() {
   const { username } = useContext(UserContext); // Access the username
-  const [strengthScore, setStrengthScore] = useState(20); // Default to 1 column
+  const [strengthScore, setStrengthScore] = useState(20); // Default to 20 columns
   const [items, setItems] = useState([]); // State to hold draggable items
+  const [selectedItem, setSelectedItem] = useState(null); // For editing an item
 
-  // Drag and drop functions
-  const handleDragStart = (e) => {
-    e.dataTransfer.setData('text/plain', e.target.id);
-    setTimeout(() => e.target.classList.add('dragging'), 0); // Add a dragging class
-  };
+  const grids = ['notEncumbered', 'encumbered', 'heavilyEncumbered']; // Grid identifiers
 
-  const handleDragEnd = (e) => {
-    e.target.classList.remove('dragging'); // Remove the dragging class
-    e.target.style.visibility = 'visible'; // Ensure visibility is restored
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault(); // Allows the drop event to be triggered
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-
-    // Get the dragged element
-    const draggedItem = document.querySelector('.item.dragging');
-
-    // Place the item inside the grid cell
-    if (draggedItem && !e.target.querySelector('.item')) {
-      e.target.appendChild(draggedItem);
+  // Load items from localStorage on component mount
+  useEffect(() => {
+    const savedItems = localStorage.getItem('inventoryItems');
+    if (savedItems) {
+      setItems(JSON.parse(savedItems));
     }
-  };
+  }, []);
 
-  const handleItemClick = (e) => {
-    const item = e.target;
+  // Save items to localStorage whenever `items` changes
+  useEffect(() => {
+    localStorage.setItem('inventoryItems', JSON.stringify(items));
+  }, [items]);
 
-    // Create or display the editing form
-    let editForm = document.querySelector('#edit-form');
-    if (!editForm) {
-      editForm = document.createElement('div');
-      editForm.id = 'edit-form';
-      editForm.style.position = 'absolute';
-      editForm.style.top = '10px';
-      editForm.style.right = '10px';
-      editForm.style.padding = '10px';
-      editForm.style.background = '#fff';
-      editForm.style.border = '1px solid #000';
-      editForm.innerHTML = `
-        <label>
-          Name: <input type="text" id="item-name" />
-        </label>
-        <br />
-        <label>
-          Info: <textarea id="item-info"></textarea>
-        </label>
-        <br />
-        <button id="save-btn">Save</button>
-        <button id="delete-btn">Delete</button> <!-- Added delete button -->
-      `;
-      document.body.appendChild(editForm);
-    }
-
-    // Populate form with the item's current data
-    const nameInput = document.querySelector('#item-name');
-    const infoTextarea = document.querySelector('#item-info');
-    nameInput.value = item.dataset.name || `Item ${item.id}`;
-    infoTextarea.value = item.dataset.info || 'No additional information.';
-
-    // Save button functionality
-    const saveButton = document.querySelector('#save-btn');
-    saveButton.onclick = () => {
-      item.dataset.name = nameInput.value;
-      item.dataset.info = infoTextarea.value;
-      item.textContent = nameInput.value; // Display the name on the item
-      alert('Item information updated!');
-      editForm.remove();
-    };
-
-    // Delete button functionality
-    const deleteButton = document.querySelector('#delete-btn');
-    deleteButton.onclick = () => {
-      if (confirm('Are you sure you want to delete this item?')) {
-        item.remove();
-        editForm.remove(); // Remove the edit form as well
-        alert('Item deleted!');
-      }
-    };
-  };
-
+  // Add a new object to the inventory
   const handleAddObject = () => {
     const newItem = {
       id: `item-${items.length + 1}`,
       name: `Item ${items.length + 1}`,
       info: 'No additional information.',
+      position: { grid: null, cell: null }, // Separate grid and cell
     };
     setItems([...items, newItem]);
   };
 
-  const handleStrengthScoreChange = (e) => {
-    setStrengthScore(Number(e.target.value));
+  // Handle item edits
+  const handleSaveItem = (updatedItem) => {
+    setItems(items.map((item) => (item.id === updatedItem.id ? updatedItem : item)));
+    setSelectedItem(null); // Close the editing form
   };
 
-  const renderGrid = () => {
+  // Handle item deletion
+  const handleDeleteItem = (itemId) => {
+    if (window.confirm('Are you sure you want to delete this item?')) {
+      setItems(items.filter((item) => item.id !== itemId));
+      setSelectedItem(null); // Close the editing form if open
+    }
+  };
+
+  // Drag-and-Drop Handlers
+  const handleDragStart = (e, itemId) => {
+    e.dataTransfer.setData('text/plain', itemId);
+  };
+
+  const handleDrop = (e, grid, cellIndex) => {
+    e.preventDefault();
+    const itemId = e.dataTransfer.getData('text/plain');
+    setItems(
+      items.map((item) =>
+        item.id === itemId
+          ? { ...item, position: { grid, cell: cellIndex } }
+          : item
+      )
+    );
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault(); // Allows drop
+  };
+
+  // Render the editing form as a popup
+  const renderEditForm = () => {
+    if (!selectedItem) return null;
+    return (
+      <div
+        id="edit-form"
+        style={{
+          position: 'fixed',
+          top: '10px',
+          right: '10px',
+          padding: '10px',
+          background: '#fff',
+          border: '1px solid #000',
+          zIndex: 1000, // Ensure it's above everything else
+        }}
+      >
+        <label>
+          Name:
+          <input
+            type="text"
+            value={selectedItem.name}
+            onChange={(e) =>
+              setSelectedItem({ ...selectedItem, name: e.target.value })
+            }
+          />
+        </label>
+        <br />
+        <label>
+          Info:
+          <textarea
+            value={selectedItem.info}
+            onChange={(e) =>
+              setSelectedItem({ ...selectedItem, info: e.target.value })
+            }
+          ></textarea>
+        </label>
+        <br />
+        <button onClick={() => handleSaveItem(selectedItem)}>Save</button>
+        <button onClick={() => handleDeleteItem(selectedItem.id)}>Delete</button>
+        <button onClick={() => setSelectedItem(null)}>Close</button>
+      </div>
+    );
+  };
+
+  // Render the grid
+  const renderGrid = (label, description, gridKey) => {
     const rows = 5;
     const cols = strengthScore;
-
-    const containerClass = strengthScore < 8 ? 'grid-container shrink' : 'grid-container';
+    const totalCells = rows * cols;
 
     return (
-      <div className={containerClass} style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
-        {Array.from({ length: rows * cols }, (_, index) => (
-          <div
-            key={index}
-            className="grid-cell"
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-          ></div>
-        ))}
-      </div>
+      <>
+        <h3>{label}</h3>
+        <h6>{description}</h6>
+        <div
+          className={`grid-container ${strengthScore < 8 ? 'shrink' : ''}`}
+          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+        >
+          {Array.from({ length: totalCells }, (_, index) => (
+            <div
+              key={index}
+              className="grid-cell"
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, gridKey, index)}
+            >
+              {items
+                .filter(
+                  (item) =>
+                    item.position.grid === gridKey &&
+                    item.position.cell === index
+                )
+                .map((item) => (
+                  <div
+                    key={item.id}
+                    id={item.id}
+                    className="item"
+                    draggable="true"
+                    onDragStart={(e) => handleDragStart(e, item.id)}
+                    onClick={() => setSelectedItem(item)} // Open edit form on click
+                  >
+                    {item.name}
+                  </div>
+                ))}
+            </div>
+          ))}
+        </div>
+      </>
     );
   };
 
   return (
     <main>
       <div className="draggable-container">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            id={item.id}
-            className="item"
-            draggable="true"
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-            onClick={handleItemClick}
-          >
-            {item.name}
-          </div>
-        ))}
+        {items
+          .filter((item) => item.position.grid === null)
+          .map((item) => (
+            <div
+              key={item.id}
+              id={item.id}
+              className="item"
+              draggable="true"
+              onDragStart={(e) => handleDragStart(e, item.id)}
+              onClick={() => setSelectedItem(item)} // Open edit form on click
+            >
+              {item.name}
+            </div>
+          ))}
       </div>
+      {renderEditForm()} {/* Render the editing form */}
       <section id="object-creator">
         <label htmlFor="Strength-Score">Strength Score:</label>
         <select
           id="Strength-Score"
           value={strengthScore}
-          onChange={handleStrengthScoreChange}
+          onChange={(e) => setStrengthScore(Number(e.target.value))}
         >
           {Array.from({ length: 17 }, (_, i) => (
             <option key={20 - i} value={20 - i}>
@@ -156,40 +194,17 @@ export function Inventory() {
         <button id="add-object" onClick={handleAddObject}>
           Add Object
         </button>
-        <div id="API-Placeholder">
-          <h10>Random Duck Pictures API PlaceHolder</h10>
-        </div>
       </section>
-
       <section id="inventory-section">
-        <h2>{username ? `${username}'s Inventory` : "Inventory"}</h2>
-        <div id="inventory-grid">
-          <h3>Not Encumbered!</h3>
-          {renderGrid()}
-          <h3>Encumbered</h3>
-          <h6>
-            (-10 speed)
-          </h6>
-          {renderGrid()}
-          <h3>Heavily Encumbered</h3>
-          <h6>
-            (-20 speed and you have disadvantage on ability checks, attack rolls,
-            and saving throws that use Strength, Dexterity, or Constitution.)
-          </h6>
-          {renderGrid()}
-        </div>
-
-        <div id="websocket-placeholder">
-          <h3>WebSocket Placeholder</h3>
-          <p>Inventory data will Real-time update so players can share an inventory</p>
-        </div>
-
-        <div id="database-placeholder">
-          <h3>Database Placeholder</h3>
-          <p>Inventory data will be fetched from the database and displayed in the grid above.</p>
-        </div>
+        <h2>{username ? `${username}'s Inventory` : 'Inventory'}</h2>
+        {renderGrid('Not Encumbered!', '', 'notEncumbered')}
+        {renderGrid('Encumbered', '(-10 speed)', 'encumbered')}
+        {renderGrid(
+          'Heavily Encumbered',
+          '(-20 speed and disadvantage on ability checks, attack rolls, and saving throws that use Strength, Dexterity, or Constitution.)',
+          'heavilyEncumbered'
+        )}
       </section>
     </main>
   );
 }
-

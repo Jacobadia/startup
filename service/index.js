@@ -61,3 +61,28 @@ app.use((_req, res) => {
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+
+// Inventory data (in memory)
+const inventories = {};
+
+// Fetch inventory
+apiRouter.get('/inventory', (req, res) => {
+  const user = Object.values(users).find((u) => u.token === req.headers.authorization?.split(' ')[1]);
+  if (user) {
+    res.json({ items: inventories[user.email] || [] });
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
+// Save inventory
+apiRouter.post('/inventory', (req, res) => {
+  const user = Object.values(users).find((u) => u.token === req.headers.authorization?.split(' ')[1]);
+  if (user) {
+    inventories[user.email] = req.body.items;
+    res.status(200).send({ msg: 'Inventory saved' });
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
