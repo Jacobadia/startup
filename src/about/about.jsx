@@ -3,9 +3,23 @@ import './about.css';
 
 export function About() {
   const [funFact, setFunFact] = useState('Loading...');
+  const [artImage, setArtImage] = useState(null);
 
   useEffect(() => {
-    const random = Math.floor(Math.random() * 1000);
+    // Fetch artwork related to cats
+    fetch('https://api.artic.edu/api/v1/artworks/search?q=cats')
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.data.length > 0) {
+          const randomIndex = Math.floor(Math.random() * data.data.length);
+          const selectedArtwork = data.data[randomIndex];
+          const imageUrl = `https://www.artic.edu/iiif/2/${selectedArtwork.image_id}/full/843,/0/default.jpg`;
+          setArtImage(imageUrl);
+        } else {
+          console.error('No artwork found');
+        }
+      })
+      .catch((error) => console.error('Error fetching artwork:', error));
 
     // Fetch fun fact
     fetch('https://uselessfacts.jsph.pl/api/v2/facts/random?language=en')
@@ -29,6 +43,11 @@ export function About() {
           </p>
         </section>
         <section id="image-container" className="image-container">
+          {artImage ? (
+            <img id="dynamic-image" src={artImage} alt="Artwork featuring cats" />
+          ) : (
+            <p>Loading artwork...</p>
+          )}
           <div className="fun-fact-box">
             <p>
               <div>Fun Fact!</div>
