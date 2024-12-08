@@ -6,36 +6,23 @@ export function About() {
   const [artImage, setArtImage] = useState(null);
 
   useEffect(() => {
-    // Fetch artwork related to "sunflowers" from the Met Museum API
-    fetch('https://collectionapi.metmuseum.org/public/collection/v1/search?q=sunflowers')
+    // Fetch a random image from Picsum Photos API
+    fetch('https://picsum.photos/v2/list?page=1&limit=30')  // Fetch a list of random images (30 per page)
       .then((response) => response.json())
       .then((data) => {
         console.log(data); // Debug API response
-        if (data.objectIDs && data.objectIDs.length > 0) {
-          const randomIndex = Math.floor(Math.random() * data.objectIDs.length);
-          const objectId = data.objectIDs[randomIndex];
-          console.log(objectId); // Debug selected artwork ID
-
-          // Fetch the details of the artwork using the object ID
-          fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectId}`)
-            .then((response) => response.json())
-            .then((artwork) => {
-              console.log(artwork); // Debug selected artwork details
-              if (artwork.primaryImage) {
-                setArtImage(artwork.primaryImage); // Set the primary image URL
-              } else {
-                console.error('Artwork missing primaryImage');
-                setArtImage(null); // Handle missing image gracefully
-              }
-            })
-            .catch((error) => console.error('Error fetching artwork details:', error));
+        if (data && data.length > 0) {
+          const randomIndex = Math.floor(Math.random() * data.length);
+          const selectedImage = data[randomIndex];
+          console.log(selectedImage); // Debug selected image
+          setArtImage(selectedImage.download_url); // Set the download URL of the image
         } else {
-          console.error('No artwork found for the search term "sunflowers"');
-          setArtImage(null); // Handle no results gracefully
+          console.error('No images found');
+          setArtImage(null); // Handle missing images gracefully
         }
       })
       .catch((error) => {
-        console.error('Error fetching artwork from Met API:', error);
+        console.error('Error fetching image from Picsum:', error);
         setArtImage(null); // Handle API failure
       });
 
@@ -66,7 +53,7 @@ export function About() {
         </section>
         <section id="image-container" className="image-container">
           {artImage ? (
-            <img id="dynamic-image" src={artImage} alt="Artwork featuring sunflowers" />
+            <img id="dynamic-image" src={artImage} alt="Random artwork" />
           ) : (
             <p>Loading artwork...</p>
           )}
@@ -81,3 +68,4 @@ export function About() {
     </main>
   );
 }
+

@@ -17,10 +17,10 @@
 }
 
 img {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  margin-bottom: 1rem;
+  max-width: 100%;         
+  max-height: 400px;        
+  height: auto;            
+  object-fit: contain;      
 }
 
 .fun-fact-box {
@@ -38,4 +38,3 @@ img {
     flex-direction: column;
   }
 }
-
