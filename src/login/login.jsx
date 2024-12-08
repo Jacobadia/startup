@@ -4,15 +4,37 @@ import { UserContext } from '../UserContext'; // Import the context
 
 export function Login() {
   const [usernameInput, setUsernameInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [error, setError] = useState('');
   const { setUsername } = useContext(UserContext); // Access setUsername from context
   const navigate = useNavigate();
 
-  const handleLoginOrCreate = () => {
-    if (usernameInput.trim()) {
-      setUsername(usernameInput); // Store username in context
-      navigate('/inventory'); // Redirect to inventory
-    } else {
-      alert('Please enter a username.');
+  const handleLoginOrCreate = async (endpoint) => {
+    if (!usernameInput.trim() || !passwordInput.trim()) {
+      setError('Please enter a username and password.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/auth/${endpoint}`, {
+        method: 'POST',
+        body: JSON.stringify({ email: usernameInput, password: passwordInput }),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      });
+
+      if (response.ok) {
+        const { token } = await response.json();
+        localStorage.setItem('userToken', token);
+        setUsername(usernameInput); // Store username in context
+        navigate('/inventory'); // Redirect to inventory
+      } else {
+        const body = await response.json();
+        setError(`⚠ Error: ${body.msg}`);
+      }
+    } catch (err) {
+      setError('⚠ Network error. Please try again.');
     }
   };
 
@@ -22,24 +44,41 @@ export function Login() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleLoginOrCreate();
         }}
       >
         <div>
           <span>Username</span>
-          <input 
-            type="text" 
+          <input
+            type="text"
             placeholder="Username"
             value={usernameInput}
-            onChange={(e) => setUsernameInput(e.target.value)} 
+            onChange={(e) => setUsernameInput(e.target.value)}
           />
         </div>
         <div>
           <span>Password</span>
-          <input type="password" placeholder="password" />
+          <input
+            type="password"
+            placeholder="Password"
+            value={passwordInput}
+            onChange={(e) => setPasswordInput(e.target.value)}
+          />
         </div>
-        <button type="submit">Login</button>
-        <button type="submit">Create</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div>
+          <button
+            type="button"
+            onClick={() => handleLoginOrCreate('login')}
+          >
+            Login
+          </button>
+          <button
+            type="button"
+            onClick={() => handleLoginOrCreate('create')}
+          >
+            Create
+          </button>
+        </div>
       </form>
     </main>
   );
