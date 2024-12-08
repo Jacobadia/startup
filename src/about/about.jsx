@@ -6,28 +6,50 @@ export function About() {
   const [artImage, setArtImage] = useState(null);
 
   useEffect(() => {
-    // Fetch artwork related to cats
-    fetch('https://api.artic.edu/api/v1/artworks/search?q=cats')
+    // Fetch artwork related to "sunflowers" from the Met Museum API
+    fetch('https://collectionapi.metmuseum.org/public/collection/v1/search?q=sunflowers')
       .then((response) => response.json())
       .then((data) => {
-        if (data.data.length > 0) {
-          const randomIndex = Math.floor(Math.random() * data.data.length);
-          const selectedArtwork = data.data[randomIndex];
-          const imageUrl = `https://www.artic.edu/iiif/2/${selectedArtwork.image_id}/full/843,/0/default.jpg`;
-          setArtImage(imageUrl);
+        console.log(data); // Debug API response
+        if (data.objectIDs && data.objectIDs.length > 0) {
+          const randomIndex = Math.floor(Math.random() * data.objectIDs.length);
+          const objectId = data.objectIDs[randomIndex];
+          console.log(objectId); // Debug selected artwork ID
+
+          // Fetch the details of the artwork using the object ID
+          fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectId}`)
+            .then((response) => response.json())
+            .then((artwork) => {
+              console.log(artwork); // Debug selected artwork details
+              if (artwork.primaryImage) {
+                setArtImage(artwork.primaryImage); // Set the primary image URL
+              } else {
+                console.error('Artwork missing primaryImage');
+                setArtImage(null); // Handle missing image gracefully
+              }
+            })
+            .catch((error) => console.error('Error fetching artwork details:', error));
         } else {
-          console.error('No artwork found');
+          console.error('No artwork found for the search term "sunflowers"');
+          setArtImage(null); // Handle no results gracefully
         }
       })
-      .catch((error) => console.error('Error fetching artwork:', error));
+      .catch((error) => {
+        console.error('Error fetching artwork from Met API:', error);
+        setArtImage(null); // Handle API failure
+      });
 
     // Fetch fun fact
     fetch('https://uselessfacts.jsph.pl/api/v2/facts/random?language=en')
       .then((response) => response.json())
       .then((data) => {
-        setFunFact(data.text);
+        console.log(data); // Log the fun fact response
+        setFunFact(data.text || 'No fun fact available');
       })
-      .catch((error) => console.error('Error fetching fun fact:', error));
+      .catch((error) => {
+        console.error('Error fetching fun fact:', error);
+        setFunFact('Sorry, we couldn\'t fetch a fun fact right now.');
+      });
   }, []);
 
   return (
@@ -44,7 +66,7 @@ export function About() {
         </section>
         <section id="image-container" className="image-container">
           {artImage ? (
-            <img id="dynamic-image" src={artImage} alt="Artwork featuring cats" />
+            <img id="dynamic-image" src={artImage} alt="Artwork featuring sunflowers" />
           ) : (
             <p>Loading artwork...</p>
           )}
@@ -59,4 +81,3 @@ export function About() {
     </main>
   );
 }
-
