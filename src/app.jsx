@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
 import { Inventory } from './inventory/inventory';
 import { About } from './about/about';
-import { UserProvider } from './UserContext'; 
+import { UserProvider, UserContext } from './UserContext';
 
 export default function App() {
     return (
@@ -14,13 +14,7 @@ export default function App() {
                 <div>
                     <header>
                         <h1>TTRPG Inventory Manager</h1>
-                        <nav>
-                            <ul>
-                                <li><NavLink className='nav-link' to="/">Login</NavLink></li>
-                                <li><NavLink className='nav-link' to="/inventory">Inventory</NavLink></li>
-                                <li><NavLink className='nav-link' to="/about">About</NavLink></li>
-                            </ul>
-                        </nav>
+                        <Navigation />
                         <hr />
                     </header>
 
@@ -40,6 +34,23 @@ export default function App() {
                 </div>
             </BrowserRouter>
         </UserProvider>
+    );
+}
+
+function Navigation() {
+    const { username } = useContext(UserContext);
+    console.log('Username:', username); // Debugging
+
+    return (
+        <nav>
+            <ul>
+                <li><NavLink className='nav-link' to="/">Login</NavLink></li>
+                {username ? (
+                    <li><NavLink className='nav-link' to="/inventory">Inventory</NavLink></li>
+                ) : null}
+                <li><NavLink className='nav-link' to="/about">About</NavLink></li>
+            </ul>
+        </nav>
     );
 }
 
