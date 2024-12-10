@@ -1,26 +1,63 @@
 import React, { useState, useContext, useEffect } from 'react';
 import './inventory.css';
-import { UserContext } from '../UserContext'; // Import the context
+import { UserContext } from '../UserContext';
 
 export function Inventory() {
   const { username } = useContext(UserContext); // Access the username
   const [strengthScore, setStrengthScore] = useState(20); // Default to 20 columns
   const [items, setItems] = useState([]); // State to hold draggable items
   const [selectedItem, setSelectedItem] = useState(null); // For editing an item
+  const [error, setError] = useState(''); // Error handling
+  const [loading, setLoading] = useState(true); // Loading state
 
   const grids = ['notEncumbered', 'encumbered', 'heavilyEncumbered']; // Grid identifiers
 
-  // Load items from localStorage on component mount
+  // Fetch items from the backend when the component mounts
   useEffect(() => {
-    const savedItems = localStorage.getItem('inventoryItems');
-    if (savedItems) {
-      setItems(JSON.parse(savedItems));
-    }
+    console.log("items: ", items)
+    const fetchInventory = async () => {
+      setLoading(true); // Start loading
+      try {
+        const response = await fetch('/api/inventory');
+        if (response.ok) {
+          const data = await response.json();
+          console.log("apiresponse: ", data)
+          setItems(data.data.items || []); // Populate items or default to an empty array
+        } else {
+          const errorData = await response.json();
+          setError(`Failed to load inventory: ${errorData.msg}`);
+        }
+      } catch (err) {
+        setError('⚠ Network error while loading inventory.');
+      } finally {
+        setLoading(false); // Stop loading
+      }
+    };
+
+    fetchInventory();
   }, []);
 
-  // Save items to localStorage whenever `items` changes
+  // Save items to the backend whenever the `items` state changes
   useEffect(() => {
-    localStorage.setItem('inventoryItems', JSON.stringify(items));
+    const saveInventory = async () => {
+      try {
+        const response = await fetch('/api/inventory', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items }),
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error(`Failed to save inventory: ${errorData.msg}`);
+          setError('⚠ Failed to save inventory. Try again later.');
+        }
+      } catch (err) {
+        console.error('⚠ Network error while saving inventory.');
+        setError('⚠ Network error while saving inventory.');
+      }
+    };
+
+    if (items.length > 0) saveInventory(); // Save only if there are items
   }, [items]);
 
   // Add a new object to the inventory
@@ -31,19 +68,21 @@ export function Inventory() {
       info: 'No additional information.',
       position: { grid: null, cell: null }, // Separate grid and cell
     };
-    setItems([...items, newItem]);
+    setItems((prevItems) => [...prevItems, newItem]);
   };
 
   // Handle item edits
   const handleSaveItem = (updatedItem) => {
-    setItems(items.map((item) => (item.id === updatedItem.id ? updatedItem : item)));
+    setItems((prevItems) =>
+      prevItems.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+    );
     setSelectedItem(null); // Close the editing form
   };
 
   // Handle item deletion
   const handleDeleteItem = (itemId) => {
     if (window.confirm('Are you sure you want to delete this item?')) {
-      setItems(items.filter((item) => item.id !== itemId));
+      setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
       setSelectedItem(null); // Close the editing form if open
     }
   };
@@ -56,8 +95,8 @@ export function Inventory() {
   const handleDrop = (e, grid, cellIndex) => {
     e.preventDefault();
     const itemId = e.dataTransfer.getData('text/plain');
-    setItems(
-      items.map((item) =>
+    setItems((prevItems) =>
+      prevItems.map((item) =>
         item.id === itemId
           ? { ...item, position: { grid, cell: cellIndex } }
           : item
@@ -65,45 +104,21 @@ export function Inventory() {
     );
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault(); // Allows drop
-  };
+  const handleDragOver = (e) => e.preventDefault(); // Allows drop
 
   // Render the editing form as a popup
   const renderEditForm = () => {
     if (!selectedItem) return null;
     return (
-      <div
-        id="edit-form"
-        style={{
-          position: 'fixed',
-          top: '10px',
-          right: '10px',
-          padding: '10px',
-          background: '#fff',
-          border: '1px solid #000',
-          zIndex: 1000, // Ensure it's above everything else
-        }}
-      >
+      <div id="edit-form" style={{ position: 'fixed', top: '10px', right: '10px', padding: '10px', background: '#fff', border: '1px solid #000', zIndex: 1000 }}>
         <label>
           Name:
-          <input
-            type="text"
-            value={selectedItem.name}
-            onChange={(e) =>
-              setSelectedItem({ ...selectedItem, name: e.target.value })
-            }
-          />
+          <input type="text" value={selectedItem.name} onChange={(e) => setSelectedItem({ ...selectedItem, name: e.target.value })} />
         </label>
         <br />
         <label>
           Info:
-          <textarea
-            value={selectedItem.info}
-            onChange={(e) =>
-              setSelectedItem({ ...selectedItem, info: e.target.value })
-            }
-          ></textarea>
+          <textarea value={selectedItem.info} onChange={(e) => setSelectedItem({ ...selectedItem, info: e.target.value })}></textarea>
         </label>
         <br />
         <button onClick={() => handleSaveItem(selectedItem)}>Save</button>
@@ -123,17 +138,9 @@ export function Inventory() {
       <>
         <h3>{label}</h3>
         <h6>{description}</h6>
-        <div
-          className={`grid-container ${strengthScore < 8 ? 'shrink' : ''}`}
-          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-        >
+        <div className={`grid-container ${strengthScore < 8 ? 'shrink' : ''}`} style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
           {Array.from({ length: totalCells }, (_, index) => (
-            <div
-              key={index}
-              className="grid-cell"
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, gridKey, index)}
-            >
+            <div key={index} className="grid-cell" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, gridKey, index)}>
               {items
                 .filter(
                   (item) =>
@@ -159,32 +166,22 @@ export function Inventory() {
     );
   };
 
+  if (loading) return <p>Loading inventory...</p>;
+
   return (
     <main>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <div className="draggable-container">
-        {items
-          .filter((item) => item.position.grid === null)
-          .map((item) => (
-            <div
-              key={item.id}
-              id={item.id}
-              className="item"
-              draggable="true"
-              onDragStart={(e) => handleDragStart(e, item.id)}
-              onClick={() => setSelectedItem(item)} // Open edit form on click
-            >
-              {item.name}
-            </div>
-          ))}
+        {items.filter((item) => item.position.grid === null).map((item) => (
+          <div key={item.id} id={item.id} className="item" draggable="true" onDragStart={(e) => handleDragStart(e, item.id)} onClick={() => setSelectedItem(item)}>
+            {item.name}
+          </div>
+        ))}
       </div>
       {renderEditForm()} {/* Render the editing form */}
       <section id="object-creator">
         <label htmlFor="Strength-Score">Strength Score:</label>
-        <select
-          id="Strength-Score"
-          value={strengthScore}
-          onChange={(e) => setStrengthScore(Number(e.target.value))}
-        >
+        <select id="Strength-Score" value={strengthScore} onChange={(e) => setStrengthScore(Number(e.target.value))}>
           {Array.from({ length: 17 }, (_, i) => (
             <option key={20 - i} value={20 - i}>
               {20 - i}
@@ -199,11 +196,7 @@ export function Inventory() {
         <h2>{username ? `${username}'s Inventory` : 'Inventory'}</h2>
         {renderGrid('Not Encumbered!', '', 'notEncumbered')}
         {renderGrid('Encumbered', '(-10 speed)', 'encumbered')}
-        {renderGrid(
-          'Heavily Encumbered',
-          '(-20 speed and disadvantage on ability checks, attack rolls, and saving throws that use Strength, Dexterity, or Constitution.)',
-          'heavilyEncumbered'
-        )}
+        {renderGrid('Heavily Encumbered', '(-20 speed and disadvantage on ability checks, attack rolls, and saving throws that use Strength, Dexterity, or Constitution.)', 'heavilyEncumbered')}
       </section>
     </main>
   );
