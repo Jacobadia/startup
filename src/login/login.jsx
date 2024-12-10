@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../UserContext'; // Import the context
+import { UserContext } from '../UserContext';
 
 export function Login() {
   const [usernameInput, setUsernameInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [error, setError] = useState('');
-  const { setUsername } = useContext(UserContext); // Access setUsername from context
+  const { setUsername } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLoginOrCreate = async (endpoint) => {
@@ -18,10 +18,8 @@ export function Login() {
     try {
       const response = await fetch(`/api/auth/${endpoint}`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
         body: JSON.stringify({ email: usernameInput, password: passwordInput }),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
       });
 
       if (response.ok) {
@@ -41,9 +39,9 @@ export function Login() {
       const response = await fetch('/api/auth/logout', { method: 'DELETE' });
       if (response.ok) {
         setUsername(null); // Clear user context
-        setError(''); // Reset any errors
-        setUsernameInput(''); // Clear input fields
+        setUsernameInput('');
         setPasswordInput('');
+        navigate('/'); // Redirect to login
       } else {
         console.error('Logout failed.');
       }
@@ -52,43 +50,10 @@ export function Login() {
     }
   };
 
-  const fetchInventory = async () => {
-    try {
-      const response = await fetch('/api/inventory');
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Inventory fetched:', data.items); // Replace with actual state management
-      } else {
-        console.error('Failed to fetch inventory');
-      }
-    } catch (err) {
-      console.error('Error fetching inventory:', err);
-    }
-  };
-
-  const saveInventory = async (items) => {
-    try {
-      const response = await fetch('/api/inventory', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items }),
-      });
-      if (!response.ok) {
-        console.error('Failed to save inventory');
-      }
-    } catch (err) {
-      console.error('Error saving inventory:', err);
-    }
-  };
-
   return (
     <main>
       <h1>Welcome to TTRPG Inventory</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <form onSubmit={(e) => e.preventDefault()}>
         <div>
           <span>Username</span>
           <input
@@ -109,23 +74,9 @@ export function Login() {
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <div>
-          <button
-            type="button"
-            onClick={() => handleLoginOrCreate('login')}
-          >
-            Login
-          </button>
-          <button
-            type="button"
-            onClick={() => handleLoginOrCreate('create')}
-          >
-            Create
-          </button>
-          <button
-            type="button"
-            onClick={handleLogout}
-            style={{ backgroundColor: 'red', color: 'white' }}
-          >
+          <button onClick={() => handleLoginOrCreate('login')}>Login</button>
+          <button onClick={() => handleLoginOrCreate('create')}>Create</button>
+          <button onClick={handleLogout} style={{ backgroundColor: 'red', color: 'white' }}>
             Logout
           </button>
         </div>
