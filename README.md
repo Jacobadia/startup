@@ -144,3 +144,22 @@ For this deliverable, I created a full-stack web application, the application in
 - [x] **Backend service endpoints** - I created authentication endpoints (create, login, logout) and endpoints for fetching and saving user inventories.
 - [x] **Frontend calls service endpoints** - I used the fetch function to interact with the backend endpoints for user authentication and inventory management. (login and inventory pages)
 
+## DB/Login Deliverable
+
+This deliverable implements user authentication and authorization functionality for the TTRPG Inventory Manager application. The project integrates MongoDB to store user credentials and application data, with functionality restricted based on user authentication status.
+
+### Features Implemented
+
+- **MongoDB Integration**
+  - [x] **MongoDB Atlas Database**: A MongoDB Atlas database instance has been created and connected to the application.
+  - [x] **Storing Data in MongoDB**: User credentials and inventory data are securely stored in MongoDB.
+
+- **User Authentication**
+  - [x] **New User Registration**: Allows users to create a new account. User credentials are securely stored in the MongoDB database.
+  - [x] **Existing User Login**: Authenticated users can log in and access their previously saved inventory.
+
+- **Authorization**
+  - [x] **Restricting Functionality**: Inventory creation and item saving are restricted to authenticated users. 
+    - **Frontend**: Prevents unauthorized access to inventory features by hiding them when the user is not logged in.
+    - **Backend**: Ensures inventory-related API calls are only successful if the user is authenticated.
+
