@@ -75,6 +75,28 @@ secureApiRouter.use(async (req, res, next) => {
   }
 });
 
+// Fetch inventory
+apiRouter.get('/inventory', async (req, res) => {
+  const user = await DB.getUserByToken(req.cookies.token);
+  if (user) {
+    const inventory = await DB.getInventory(user.email);
+    res.json({ items: inventory?.items || [] });
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
+// Save inventory
+apiRouter.post('/inventory', async (req, res) => {
+  const user = await DB.getUserByToken(req.cookies.token);
+  if (user) {
+    await DB.saveInventory(user.email, req.body.items);
+    res.status(200).send({ msg: 'Inventory saved' });
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
 // Inventory endpoints (secure)
 secureApiRouter.get('/inventory', async (req, res) => {
   const inventory = await DB.getInventory(req.user.email);
