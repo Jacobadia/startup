@@ -14,26 +14,33 @@ export function Inventory() {
 
   // Fetch items from the backend when the component mounts
   useEffect(() => {
-    console.log("items: ", items)
     const fetchInventory = async () => {
       setLoading(true); // Start loading
       try {
         const response = await fetch('/api/inventory');
         if (response.ok) {
           const data = await response.json();
-          console.log("apiresponse: ", data)
-          setItems(data.data.items || []); // Populate items or default to an empty array
+          console.log("apiresponse: ", data);
+  
+          // Extract the items correctly from the nested structure
+          if (data.items && Array.isArray(data.items.items)) {
+            setItems(data.items.items); // Set the items in state
+          } else {
+            console.error("Unexpected inventory structure:", data);
+            setError('⚠ Inventory data format is incorrect.');
+          }
         } else {
           const errorData = await response.json();
-          setError(`Failed to load inventory: ${errorData.msg}`);
+          setError(`⚠ Failed to load inventory: ${errorData.msg}`);
         }
       } catch (err) {
+        console.error('⚠ Network error while loading inventory.', err);
         setError('⚠ Network error while loading inventory.');
       } finally {
         setLoading(false); // Stop loading
       }
     };
-
+  
     fetchInventory();
   }, []);
 
