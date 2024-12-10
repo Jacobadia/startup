@@ -25,8 +25,6 @@ export function Login() {
       });
 
       if (response.ok) {
-        const { token } = await response.json();
-        localStorage.setItem('userToken', token);
         setUsername(usernameInput); // Store username in context
         navigate('/inventory'); // Redirect to inventory
       } else {
@@ -35,6 +33,51 @@ export function Login() {
       }
     } catch (err) {
       setError('⚠ Network error. Please try again.');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/auth/logout', { method: 'DELETE' });
+      if (response.ok) {
+        setUsername(null); // Clear user context
+        setError(''); // Reset any errors
+        setUsernameInput(''); // Clear input fields
+        setPasswordInput('');
+      } else {
+        console.error('Logout failed.');
+      }
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
+
+  const fetchInventory = async () => {
+    try {
+      const response = await fetch('/api/inventory');
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Inventory fetched:', data.items); // Replace with actual state management
+      } else {
+        console.error('Failed to fetch inventory');
+      }
+    } catch (err) {
+      console.error('Error fetching inventory:', err);
+    }
+  };
+
+  const saveInventory = async (items) => {
+    try {
+      const response = await fetch('/api/inventory', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items }),
+      });
+      if (!response.ok) {
+        console.error('Failed to save inventory');
+      }
+    } catch (err) {
+      console.error('Error saving inventory:', err);
     }
   };
 
@@ -77,6 +120,13 @@ export function Login() {
             onClick={() => handleLoginOrCreate('create')}
           >
             Create
+          </button>
+          <button
+            type="button"
+            onClick={handleLogout}
+            style={{ backgroundColor: 'red', color: 'white' }}
+          >
+            Logout
           </button>
         </div>
       </form>
