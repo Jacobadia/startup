@@ -20,7 +20,6 @@ export function Inventory() {
         const response = await fetch('/api/inventory');
         if (response.ok) {
           const data = await response.json();
-          console.log("apiresponse: ", data);
   
           // Extract the items correctly from the nested structure
           if (data.items && Array.isArray(data.items.items)) {
