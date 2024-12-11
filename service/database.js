@@ -4,7 +4,14 @@ const uuid = require('uuid');
 const config = require('./dbConfig.json');
 
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
-const client = new MongoClient(url);
+
+// Updated options for MongoClient
+const client = new MongoClient(url, {
+  tls: true,
+  serverSelectionTimeoutMS: 3000,
+  autoSelectFamily: false, // Ensures compatibility with IPv6/IPv4 issues
+});
+
 const db = client.db('inventoryApp');
 const userCollection = db.collection('user');
 const inventoryCollection = db.collection('inventory');
@@ -16,7 +23,7 @@ const inventoryCollection = db.collection('inventory');
     await db.command({ ping: 1 });
     console.log('Connected to database');
   } catch (ex) {
-    console.log(`Unable to connect to database with ${url} because ${ex.message}`);
+    console.error(`Unable to connect to database: ${ex.message}`);
     process.exit(1);
   }
 })();
