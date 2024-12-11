@@ -152,11 +152,12 @@ This deliverable implements user authentication and authorization functionality 
 
 - **MongoDB Integration**
   - [x] **MongoDB Atlas Database**: A MongoDB Atlas database instance has been created and connected to the application.
-  - [x] **Storing Data in MongoDB**: User credentials and inventory data are securely stored in MongoDB.
+  - [x] **Storing Data in MongoDB**: User credentials and the application inventory data are securely stored in MongoDB.
 
 - **User Authentication**
   - [x] **New User Registration**: Allows users to create a new account. User credentials are securely stored in the MongoDB database.
   - [x] **Existing User Login**: Authenticated users can log in and access their previously saved inventory.
+  - [x] **User Log Out**: Authenticated users can log out.
 
 - **Authorization**
   - [x] **Restricting Functionality**: Inventory creation and item saving are restricted to authenticated users. 
